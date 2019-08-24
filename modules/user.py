@@ -11,6 +11,7 @@ class UserModel:
         self.name = name
         self.email = email
         self.password = password
+        self.id = 0
 
     def add_user(self):
         conn = sqlite3.connect('user.db')
@@ -20,9 +21,18 @@ class UserModel:
         conn.commit()
         conn.close()
 
+    #not work
+    def update_user(self):
+        conn = sqlite3.connect('user.db')
+        cursor = conn.cursor()
+        update_query = 'UPDATE users SET name=?, email=?, password=? WHERE id=?'
+
+        cursor.execute(update_query, (self.name, self.email, self.password, self.id))
+        conn.commit()
+        conn.close()
+
     @staticmethod
     def get_user(name):
-        user = None
         conn = sqlite3.connect('user.db')
         cursor = conn.cursor()
         query_one_user = 'SELECT * FROM users WHERE name=?'
@@ -36,8 +46,12 @@ class UserModel:
 
     @staticmethod
     def delete_user(name):
-        global users
-        users = [item for item in users if item.name != name]
+        conn = sqlite3.connect('user.db')
+        cursor = conn.cursor()
+        delete_query = 'DELETE FROM users WHERE name=?'
+        cursor.execute(delete_query, (name,))
+        conn.commit()
+        conn.close()
 
     @staticmethod
     def get_all_user():
