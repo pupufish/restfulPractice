@@ -36,6 +36,7 @@ class User(Resource):
             'user': user_schema.dump(user)
         }
 
+    # not work
     def put(self, name):
         result = user_schema.load(get_param())
         user = UserModel.get_user(name)
@@ -43,6 +44,7 @@ class User(Resource):
             return {'State': 'Failed', 'msg': "User not exist"}, 403
         user.email = result['email']
         user.password = result['password']
+
         return {
             'State': 'Success',
             'msg': "update %s" % name,
