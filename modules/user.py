@@ -7,11 +7,11 @@ class UserModel:
     email = ''
     password = ''
 
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, id=0):
         self.name = name
         self.email = email
         self.password = password
-        self.id = 0
+        self.id = id
 
     def add_user(self):
         conn = sqlite3.connect('user.db')
@@ -21,7 +21,6 @@ class UserModel:
         conn.commit()
         conn.close()
 
-    #not work
     def update_user(self):
         conn = sqlite3.connect('user.db')
         cursor = conn.cursor()
@@ -38,7 +37,7 @@ class UserModel:
         query_one_user = 'SELECT * FROM users WHERE name=?'
         result = cursor.execute(query_one_user, (name,)).fetchone()
         if result is None:
-            pass
+            return None
         user = UserModel(result[1], result[2], result[3])
         user.id = result[0]
         conn.close()
@@ -65,4 +64,3 @@ class UserModel:
             users.append(user)
         conn.close()
         return users
-
